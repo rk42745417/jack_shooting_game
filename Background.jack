@@ -1,8 +1,5 @@
-class Board{
+class Boardground{
     function void main(){
-        field int score;
-        field int level;
-        field Array bullet_cnt;
         
     }
 }
