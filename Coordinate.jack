@@ -23,4 +23,8 @@ class Coordinate {
         do Memory.deAlloc(this);
         return;
     }
+    /* Return the Manhaton distance of a and b */
+    function int distance(Coordinate a, Coordinate b) {
+        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+    }
 }

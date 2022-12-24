@@ -1,46 +1,46 @@
 class Bullet{
-    field int x,y,radius,speed;//x,y is center
-    constructor Bullet new(int _x,int _y,int _radius,int _speed){
-        let x=_x;
-        let y=_y;
-        let radius=_radius;
-        let speed=_speed;
+    field Coordinate coordinate;
+    field int radius, speed;//x,y is center
+    constructor Bullet new(int Ax,int Ay,int Aradius,int Aspeed){
+        let coordinate = Coordinate.new(Ax, Ay);
+        let radius = Aradius;
+        let speed = Aspeed;
         do draw();
         return this;
     }
     method void dispose() {
+        do coordinate.dispose();
         do Memory.deAlloc(this);
         return;
     }
-    method void draw(){
-        do Screen.setColor(true);
-        do Screen.drawCircle(x,y,radius);
-    }
-    method void erase(){
-        do Screen.setColor(false);
-        do Screen.drawCircle(x,y,radius);
+    method void draw(boolean isBlack){
+        do Screen.setColor(isBlack);
+        do Screen.drawCircle(cooridnate.getX(), coordinate.getY(), radius);
+        return;
     }
     method void move(){
+        var int yn;
         let yn=y-speed;
         do erase();
-        if((yn-radius)<=0){
+        if(~((yn-radius)>0)){
             let y=yn;
             do draw();
         }
         else{
             do dispose();
         }
+        return;
     }
-    function int x_(){
-        return x;
+    method int getX(){
+        return coordinate.getX();
     }
-    function int y_(){
-        return y;
+    method int getY(){
+        return coordinate.getY();
     }
-    function int radius_(){
+    method int getRadius(){
         return radius;
     }
-    function int speed_(){
+    method int getSpeed(){
         return speed;
     }
 }

@@ -14,7 +14,7 @@ class Player{
     method int getHealth() { return health; }
     /* leftBorder is the border of the game board */
     method void moveLeft(int leftBorder) {
-        if(coordinate.getX() - speed - radius < leftBorder) {
+        if(coordinate.getX() - speed - radius < leftBorder) { // 3 is for the error
             return;
         }
         do coordinate.setX(coordinate.getX() - speed);
@@ -39,6 +39,7 @@ class Player{
         return;
     }
     method void dispose() {
+        do coordinate.dispose();
         do Memory.deAlloc(this);
         return;
     }
