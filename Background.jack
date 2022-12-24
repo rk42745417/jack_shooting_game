@@ -7,20 +7,24 @@ method void draw(): Draw the background on the screen.
 class Background{
     field int x, y;
     field int width, height;
+    field int line; // The y coordinate of the detection line.
     constructor Background new(int Ax, int Ay, int Aheight, int Awidth) {
         let x = Ax;
         let y = Ay;
         let height = Aheight;
         let width = Awidth;
+        let line = y + height - 1 - (height / 6); // The line is at the 1/6 height from bottom.
         return this;
     }
+    method int getLineHeight() {
+        return line;
+    }
     method void draw() {
-        var int newX, newY, line;
+        var int newX, newY;
 
         do Screen.setColor(true);
         let newX = x + width - 1;
         let newY = y + height - 1;
-        let line = y + height - 1 - Math.divide(height, 6); // The line is at the 1/6 height from bottom.
 
         do Screen.drawLine(x, y, x, newY); // The left border
         do Screen.drawLine(x, y, newX, y); // The top border

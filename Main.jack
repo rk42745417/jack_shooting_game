@@ -12,7 +12,7 @@ class Main{
         let background = Background.new(2, 2, height, width);
         
         let playerSize = 18;
-        let player = Player.new(1 + width / 2, 3, playerSize, 5, 2 + height - playerSize - 1);
+        let player = Player.new(2 + (width / 2), 3, playerSize, 15, 2 + ((height + background.getLineHeight()) / 2) - 1);
 
         let key = Keyboard.keyPressed();
         let exit = false;
