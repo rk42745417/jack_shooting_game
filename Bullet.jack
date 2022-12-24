@@ -1,8 +1,8 @@
 class Bullet{
-    field int x,y,radius,speed;//x,y is center
+    field int radius,speed;
+    field Coordinate coordinate;//x,y is center
     constructor Bullet new(int _x,int _y,int _radius,int _speed){
-        let x=_x;
-        let y=_y;
+        let coordinate = Coordinate.new(_x,_y);
         let radius=_radius;
         let speed=_speed;
         do draw();
@@ -14,33 +14,31 @@ class Bullet{
     }
     method void draw(){
         do Screen.setColor(true);
-        do Screen.drawCircle(x,y,radius);
+        do Screen.drawCircle(coordinate.getX(),coordinate.getX(),radius);
     }
     method void erase(){
         do Screen.setColor(false);
-        do Screen.drawCircle(x,y,radius);
+        do Screen.drawCircle(coordinate.getX(),coordinate.getX(),radius);
     }
     method void move(){
-        let yn=y-speed;
+        var int yn;
+        let yn=coordinate.getX()-speed;
         do erase();
         if((yn-radius)<=0){
-            let y=yn;
+            do coordinate.setY(yn);
             do draw();
         }
         else{
             do dispose();
         }
     }
-    function int x_(){
-        return x;
+    function Coordinate get_position(){
+        return coordinate;
     }
-    function int y_(){
-        return y;
-    }
-    function int radius_(){
+    function int get_radius(){
         return radius;
     }
-    function int speed_(){
+    function int get_speed(){
         return speed;
     }
 }
