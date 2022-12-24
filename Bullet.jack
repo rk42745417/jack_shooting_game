@@ -1,3 +1,46 @@
 class Bullet{
-
+    field int x,y,radius,speed;//x,y is center
+    constructor Bullet new(int _x,int _y,int _radius,int _speed){
+        let x=_x;
+        let y=_y;
+        let radius=_radius;
+        let speed=_speed;
+        do draw();
+        return this;
+    }
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+    method void draw(){
+        do Screen.setColor(true);
+        do Screen.drawCircle(x,y,radius);
+    }
+    method void erase(){
+        do Screen.setColor(false);
+        do Screen.drawCircle(x,y,radius);
+    }
+    method void move(){
+        let yn=y-speed;
+        do erase();
+        if((yn-radius)<=0){
+            let y=yn;
+            do draw();
+        }
+        else{
+            do dispose();
+        }
+    }
+    function int x_(){
+        return x;
+    }
+    function int y_(){
+        return y;
+    }
+    function int radius_(){
+        return radius;
+    }
+    function int speed_(){
+        return speed;
+    }
 }
