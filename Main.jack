@@ -11,7 +11,8 @@ class Main{
         let height = 248;
         let background = Background.new(2, 2, height, width);
         
-        let playerSize = 30;
+        let playerSize = 18;
+        let player = Player.new(1 + width / 2, 3, playerSize, 5, 2 + height - playerSize - 1);
 
         let key = Keyboard.keyPressed();
         let exit = false;
@@ -35,7 +36,20 @@ class Main{
         do background.draw();
         /* Main Program */
         while(~exit) {
+            // player.draw(false);
+            let key = Keyboard.keyPressed();
+            if(key = 132) { // right arrow
+                do player.draw(false);
+                do player.moveRight(2 + width);
+            }
+            if(key = 130) {
+                do player.draw(false);
+                do player.moveLeft(2);
+            }
+            do player.draw(true);
             let exit = false;            
+            
+            do Sys.wait(100);
         }
 
         /* Game over, output the END screen */

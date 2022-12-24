@@ -1,4 +1,45 @@
 class Player{
-    field int position;
+    field int radius;
     field int health;
+    field int speed; // pixels per move
+    field Coordinate coordinate;
+    
+    constructor Player new(int Aposition, int Ahealth, int Aradius, int Aspeed, int Aheight) {
+        let coordinate = Coordinate.new(Aposition, Aheight);
+        let health = Ahealth;
+        let radius = Aradius;
+        let speed = Aspeed;
+        return this;
+    }
+    method int getHealth() { return health; }
+    /* leftBorder is the border of the game board */
+    method void moveLeft(int leftBorder) {
+        if(coordinate.getX() - speed - radius < leftBorder) {
+            return;
+        }
+        do coordinate.setX(coordinate.getX() - speed);
+        return;
+    }
+    /* rightBorder is the border of the game board */
+    method void moveRight(int rightBorder) {
+        if(coordinate.getX() + speed + radius > rightBorder) {
+            return;
+        }
+        do coordinate.setX(coordinate.getX() + speed);
+        return;
+    }
+    /* value can be negative */
+    method void addHealth(int value) {
+        let health = health + value;
+        return;
+    }
+    method void draw(boolean isBlack) {
+        do Screen.setColor(isBlack);
+        do Screen.drawCircle(coordinate.getX(), coordinate.getY(), radius);
+        return;
+    }
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
 }
