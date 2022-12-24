@@ -1,5 +1,48 @@
 class Main{
     function void main(){
-        //123
+        var Background background;
+        var int key, width, height;
+        var int playerSize;
+        var boolean exit;
+        var Player player;
+
+        /* The size of the game board */
+        let width = 200;
+        let height = 248;
+        let background = Background.new(2, 2, height, width);
+        
+        let playerSize = 30;
+
+        let key = Keyboard.keyPressed();
+        let exit = false;
+        
+        /* Game starts, output the start screen */
+        do Screen.clearScreen();
+        do Output.moveCursor(10, 20);
+        do Output.printString("Press space to start");
+
+        while(~(key = 0)) { // Wait until no key is pressed
+            let key = Keyboard.keyPressed();
+        }
+        while(~(key = 32)) { // Wait until space is pressed
+            let key = Keyboard.keyPressed();
+        }
+        while(key = 32) { // Wait until spce is released
+            let key = Keyboard.keyPressed();
+        }
+
+        do Screen.clearScreen();
+        do background.draw();
+        /* Main Program */
+        while(~exit) {
+            let exit = false;            
+        }
+
+        /* Game over, output the END screen */
+        do Screen.clearScreen();
+        do Output.moveCursor(10, 30);
+        do Output.printString("END");
+
+        return;
     }
 }

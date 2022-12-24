@@ -1,3 +1,4 @@
 class Player{
-
+    field int position;
+    field int health;
 }

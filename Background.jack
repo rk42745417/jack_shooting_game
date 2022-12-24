@@ -1,5 +1,37 @@
-class Boardground{
-    function void main(){
-        
+/*
+The Background (Lines, etc) of the game.
+
+constructor new(int Ax, int Ay, int Aheight, int Awidth): declare a Background with the left-top point (Ax, Ay) and height Aheight and width Awidth.
+method void draw(): Draw the background on the screen.
+*/
+class Background{
+    field int x, y;
+    field int width, height;
+    constructor Background new(int Ax, int Ay, int Aheight, int Awidth) {
+        let x = Ax;
+        let y = Ay;
+        let height = Aheight;
+        let width = Awidth;
+        return this;
+    }
+    method void draw() {
+        var int newX, newY, line;
+
+        do Screen.setColor(true);
+        let newX = x + width - 1;
+        let newY = y + height - 1;
+        let line = y + height - 1 - Math.divide(height, 6); // The line is at the 1/6 height from bottom.
+
+        do Screen.drawLine(x, y, x, newY); // The left border
+        do Screen.drawLine(x, y, newX, y); // The top border
+        do Screen.drawLine(x, newY, newX, newY); // The bottom border
+        do Screen.drawLine(newX, y, newX, newY); // The right border
+        do Screen.drawLine(x, line, newX, line); // The detection line
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
     }
 }
