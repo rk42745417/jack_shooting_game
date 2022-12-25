@@ -1,5 +1,5 @@
 class Enemy{
-    field int size,speed,hp,max_hp,max_y;//max_y is the position where enemy reach so that player's hp will -1
+    field int size,speed,hp,max_hp,max_y;//max_y is the detection line
     field Coordinate coordinate;//x,y is left up
     constructor Bullet new(int _x,int _y,int _size,int _speed,int _hp,int _max_hp, int _max_y){
         let coordinate = Coordinate.new(_x,_y);
