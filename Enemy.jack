@@ -1,5 +1,5 @@
 class Enemy{
-    field int size,speed,hp,max_hp,max_y;
+    field int size,speed,hp,max_hp,max_y;//max_y is the position where enemy reach so that player's hp will -1
     field Coordinate coordinate;//x,y is left up
     constructor Bullet new(int _x,int _y,int _size,int _speed,int _hp,int _max_hp, int _max_y){
         let coordinate = Coordinate.new(_x,_y);
@@ -19,8 +19,8 @@ class Enemy{
         var int left,right,up,down,part;
         let left=coordinate.getX();
         let up=coordinate.getY();
-        let right=up+size;
-        let down=y+size;
+        let right=left+size;
+        let down=up+size;
         do Screen.setColor(true);
         do Screen.drawLine(left,up,right,up);
         do Screen.drawLine(left,up,left,down);
@@ -41,7 +41,7 @@ class Enemy{
             let y=yn;
             do draw();
         }
-        else{
+        else{//player hp -1;
             do dispose();
         }
     }
@@ -58,6 +58,43 @@ class Enemy{
         }
     }
     function boolean is_crash(Bullet bullet){
-        //if(bullet.coordinate.get()//明天處理計算幾何的部分
+        var int r2,down,left,right,up,bul_x,bul_y,bul_left,bul_right,dis_c_down,dis_c_leftdown,dis_c_rightdown;
+        //dis is squared
+        let r2=bullet.getRadius()*bullet.getRadius();
+        let left=coordinate.getX();
+        let up=coordinate.getY();
+        let right=up+size;
+        let down=y+size;
+        let bul_x=bullet.getX();
+        let dis_c_down=(bullet.getY()-down) * (bullet.getY()-down);
+        let dis_c_leftdown=(bullet.getX()-left) * (bullet.getX()-left)+(bullet.getY()-down)*(bullet.getY()-down);
+        let dis_c_rightdown=(bullet.getX()-right) * (bullet.getX()-left)+(bullet.getY()-down)*(bullet.getY()-down);
+        if((~((dis_c_leftdown > r2)&(dis_c_rightdown > r2))) | (~(dis_c_down > r2)) & (~((left>bul_right)|(right<bul_left))){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    method int getX(){
+        return coordinate.getX();
+    }
+    method int getY(){
+        return coordinate.getY();
+    }
+    method int getSize(){
+        return hp;
+    }
+    method int getSpeed(){
+        return speed;
+    }
+    method int getHp(){
+        return hp;
+    }
+    method int getMax_hp(){
+        return max_hp;
+    }
+    method int getMax_y(){
+        return max_y;
     }
 }
