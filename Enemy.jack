@@ -102,10 +102,10 @@ class Enemy{
     method int getHealth(){
         return health;
     }
-    method int getMaxhealth(){
+    method int getMaxHealth(){
         return maxHealth;
     }
-    method int getMaxy(){
+    method int getMaxY(){
         return maxY;
     }
 }
