@@ -27,7 +27,7 @@ class Enemy{
         do Screen.drawLine(left,down,right,down);
         do Screen.drawLine(right,up,right,down);
         let part=size*(hp/max_hp)-1;
-        do Screen.drawRectangle(x,y,x+part,y+part);
+        do Screen.drawRectangle(left,up,x+part,down);
     }
     method void erase(){
         do Screen.setColor(false);
