@@ -19,8 +19,8 @@ class Enemy{
         var int left,right,up,down,part;
         let left=coordinate.getX();
         let up=coordinate.getY();
-        let right=left+size;
-        let down=up+size;
+        let right=left+size-1;
+        let down=up+size-1;
         do Screen.setColor(true);
         do Screen.drawLine(left,up,right,up);
         do Screen.drawLine(left,up,left,down);
@@ -63,8 +63,8 @@ class Enemy{
         let r2=bullet.getRadius()*bullet.getRadius();
         let left=coordinate.getX();
         let up=coordinate.getY();
-        let right=up+size;
-        let down=y+size;
+        let right=left+size-1;
+        let down=up+size-1;
         let bul_x=bullet.getX();
         let dis_c_down=(bullet.getY()-down) * (bullet.getY()-down);
         let dis_c_leftdown=(bullet.getX()-left) * (bullet.getX()-left)+(bullet.getY()-down)*(bullet.getY()-down);
