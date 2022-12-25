@@ -28,10 +28,12 @@ class Enemy{
         do Screen.drawLine(right,up,right,down);
         let part=size*(hp/max_hp)-1;
         do Screen.drawRectangle(left,up,x+part,down);
+        return;
     }
     method void erase(){
         do Screen.setColor(false);
         do Screen.drawCircle(x,y,radius);
+        return;
     }
     method void move(){
         var int yn;
@@ -44,6 +46,7 @@ class Enemy{
         else{//player hp -1;
             do dispose();
         }
+        return;
     }
     method void crash(){
         var int new_hp;
@@ -56,6 +59,7 @@ class Enemy{
         else{
             do dispose();
         }
+        return;
     }
     function boolean is_crash(Bullet bullet){
         var int r2,down,left,right,up,bul_x,bul_y,bul_left,bul_right,dis_c_down,dis_c_leftdown,dis_c_rightdown;
