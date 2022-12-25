@@ -22,7 +22,7 @@ class Bullet{
         var int yn;
         let yn=coordinate.getY()-speed;
         do draw(false);
-        if(~((yn-radius)>0)){
+        if(~((yn-radius)>2)){
             do coordinate.setY(yn);
             do draw(true);
         }

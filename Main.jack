@@ -51,6 +51,10 @@ class Main{
                 do player.draw(false);
                 do player.moveLeft(2);
             }
+            if(key = 32) {
+                do player.draw(false);
+                do player.moveLeft(2);
+            }
             do player.draw(true);
             let exit = false;            
             
