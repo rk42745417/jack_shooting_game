@@ -75,10 +75,12 @@ class Enemy{
         let right=left+size-1;
         let down=up+size-1;
         let bul_x=bullet.getX();
-        let dis_c_down=(bullet.getY()-down) * (bullet.getY()-down);
-        let dis_c_leftdown=(bullet.getX()-left) * (bullet.getX()-left)+(bullet.getY()-down)*(bullet.getY()-down);
-        let dis_c_rightdown=(bullet.getX()-right) * (bullet.getX()-left)+(bullet.getY()-down)*(bullet.getY()-down);
-        if((~((dis_c_leftdown > r2)&(dis_c_rightdown > r2))) | (~(dis_c_down > r2)) & (~((left>bul_right)|(right<bul_left)))){
+        let bul_y=bullet.getY();
+        let dis_c_down=(bul_y-down) * (bul_y-down);
+        let dis_c_leftdown=(bul_x-left) * (bul_x-left) + (bul_y-down) * (bul_y-down);
+        let dis_c_rightdown=(bul_x-right) * (bul_x-left) + (bul_y-down) * (bul_x-down);
+        if(( ~( (dis_c_leftdown > r2) & (dis_c_rightdown > r2) ) ) |
+           ( ( ~(dis_c_down > r2) ) & ( ~( (left>bul_right) | (right<bul_left) ) ) )){
             return true;
         }
         else{
