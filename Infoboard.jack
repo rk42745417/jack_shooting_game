@@ -39,11 +39,33 @@ class Infoboard{
     }
     method void update_score(int new_score){
         let score=new_score;
-        //draw_score();
+        do Output.moveCursor(2,40);
+        do Output.printInt(score);
+        return;
+    }
+    method void print_message(int type){//type=0 is clear
+        var String message;
+        if(type=0){
+            do Output.moveCursor(17,40);
+            let message="               ";
+            do Output.printString(message);
+        }
+        if(type=1){
+            do Output.moveCursor(17,40);
+            let message="LEVEL UP!";
+            do Output.printString(message);
+        }
+        if(type=2){
+            do Output.moveCursor(17,40);
+            let message="You are damaged";
+            do Output.printString(message);
+        }
         return;
     }
     method void update_level(int new_level){
         let level=new_level;
+        do Output.moveCursor(5,40);
+        do Output.printInt(level);
         return;
     }
     method void update_health(int new_health){
