@@ -34,7 +34,7 @@ class Infoboard{
         do Output.moveCursor(8,40);
         do Output.printInt(health);
         do Output.moveCursor(15,40);
-        do Output.printString("Press space to shoot");
+        do Output.printString("Use arrow keys to move");
         return;
     }
     method void updateScore(int newScore){
