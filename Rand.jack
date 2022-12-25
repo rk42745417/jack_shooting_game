@@ -1,88 +1,50 @@
-/**
- * Simple rand library for Tetris randomizer
- */
 class Rand {
-    static Array bag, nextBag;
-    static int index;
-    static int currentValue;
-
-    function void init(int v) {
-        var int i;
-
-        do Rand.setSeed(v);
-
-        let bag = Array.new(7);
-        let nextBag = Array.new(7);
-
-        // set the initial nextBag (identical permutation)
-        let i = 0;
-        while (i < 7) {
-            let nextBag[i] = i;
-            let i = i + 1;
-        }
-
-        do Rand.loadBag(); // randomize nextBag
-        do Rand.loadBag(); // discard the current bag (identical) and load the randomized bag
-        let index = 0;
-
+    static int seed;
+    
+    function void setSeed(int newSeed) {
+        let seed = newSeed;
         return;
     }
 
-    /** take one element from the current bag. if the bag gets empty, load from the nextBag */
-    function int take() {
-        var int v;
-        let v = bag[index];
-
-        let index = index + 1;
-        if (index = 7) {
-            let index = 0;
-            do Rand.loadBag();
+    function int rand() {
+        /** return a random number in the range 0..32767 */
+        let seed = seed + 20251;
+        if (seed < 0) {
+            let seed = seed - 32767 - 1;
         }
-        return v;
+        return seed;
     }
 
-    /** fill the bag using the elements in the nextBag, and shuffle nextBag for the next load */
-    function void loadBag() {
-
-        var int i;
-        let i = 0;
-        while (i < 7) {
-            let bag[i] = nextBag[i];
-            let i = i + 1;
+    function int randRange(int range) {
+        /** return a random number in the range 0..range */
+        var int mask;
+        var int ret;
+        let mask = 1;
+        while (mask < range) {
+            let mask = mask * 2 + 1;
         }
-        do Rand.makePermutation(nextBag);
-
-        return;
-    }
-
-    function void setSeed(int v) {
-        let currentValue = v;
-        return;
-    }
-
-    /** a (quick and dirty) random number generator ( < 16383, maximum integer allowed) */
-    function int getValue() {
-        var int v;
-        let v = (currentValue * 253) + 1;
-        let currentValue = v & 16383;
-        return currentValue;
-    }
-
-    /** permutation generator using Knuth shuffles */
-    function void makePermutation(Array arr) {
-        var int i, j;
-        var int t;
-
-        let i = 0;
-        while (i < 6) {
-            let t = Rand.getValue();
-            let j = i + t - ((t / (7 - i)) * (7 - i));  // j = i + (rand() mod (7 - i)) i.e. i <= j < 7
-            let t = arr[i];
-            let arr[i] = arr[j];
-            let arr[j] = t;
-
-            let i = i + 1;
+        let ret = Rand.rand() & mask;
+        while (ret > range) {
+            let ret = Rand.rand() & mask;
         }
-        return;
+        return ret;
     }
+
+
+    function boolean randBoolean(int cutOff) {
+        // cutOff: 0 - 100
+        // Probability of generating true: cutOff / 100 
+        // Probability of generating true: 1 - cutOff / 100 
+        var int randBinaryInt;
+        var boolean randReturnBoolean;
+        let randBinaryInt = Random.randRange(100);
+        if (randBinaryInt < cutOff) {
+            let randReturnBoolean = true;
+        }
+        else {
+            let randReturnBoolean = false;
+        }
+        return randReturnBoolean;
+    }
+
 }
