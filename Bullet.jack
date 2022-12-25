@@ -5,7 +5,7 @@ class Bullet{
         let coordinate = Coordinate.new(Ax, Ay);
         let radius = Aradius;
         let speed = Aspeed;
-        do draw();
+        do draw(true);
         return this;
     }
     method void dispose() {
@@ -20,11 +20,11 @@ class Bullet{
     }
     method void move(){
         var int yn;
-        let yn=y-speed;
-        do erase();
+        let yn=coordinate.getY()-speed;
+        do draw(false);
         if(~((yn-radius)>0)){
-            let y=yn;
-            do draw();
+            do coordinate.setY(yn);
+            do draw(true);
         }
         else{
             do dispose();

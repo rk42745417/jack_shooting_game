@@ -1,3 +1,29 @@
 class Infoboard{
-    
+    field int x,y,height,width,score,level;
+    constructor Infoboard new(int _x,int _y,int _height,int _width) {
+        let x=_x;
+        let y=_y;
+        let height=_height;
+        let width=_width;
+        return this;
+    }
+    method void draw(){
+        var int left,right,up,down,part;
+        let left=coordinate.getX();
+        let up=coordinate.getY();
+        let right=left+width-1;
+        let down=up+height-1;
+        do Screen.setColor(true);
+        do Screen.drawLine(left,up,right,up);
+        do Screen.drawLine(left,up,left,down);
+        do Screen.drawLine(left,down,right,down);
+        do Screen.drawLine(right,up,right,down);
+        //do Output.moveCursor(50,y);
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
 }
