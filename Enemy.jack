@@ -1,12 +1,12 @@
 class Enemy{
-    field int size,speed,hp,max_hp,max_y;//max_y is the detection line
+    field int size,speed,health,max_health,max_y;//max_y is the detection line
     field Coordinate coordinate;//x,y is left up
-    constructor Enemy new(int _x,int _y,int _size,int _speed,int _hp,int _max_hp, int _max_y){
+    constructor Enemy new(int _x,int _y,int _size,int _speed,int _health,int _max_health, int _max_y){
         let coordinate = Coordinate.new(_x,_y);
         let size=_size;
         let speed=_speed;
-        let hp=_hp;
-        let max_hp=_max_hp;
+        let health=_health;
+        let max_health=_max_health;
         let max_y=_max_y;
         do draw();
         return this;
@@ -26,7 +26,7 @@ class Enemy{
         do Screen.drawLine(left,up,left,down);
         do Screen.drawLine(left,down,right,down);
         do Screen.drawLine(right,up,right,down);
-        let part=left+size*(hp/max_hp)-1;
+        let part=left+size*(health/max_health)-1;
         do Screen.drawRectangle(left,up,part,down);
         return;
     }
@@ -48,17 +48,17 @@ class Enemy{
             do coordinate.setY(yn);
             do draw();
         }
-        else{//player hp -1;
+        else{//player health -1;
             do dispose();
         }
         return;
     }
     method void crash(){
-        var int new_hp;
-        let new_hp=hp-1;
+        var int new_health;
+        let new_health=health-1;
         do erase();
-        if(~(new_hp>0)){
-            let hp=new_hp;
+        if(~(new_health>0)){
+            let health=new_health;
             do draw();
         }
         else{
@@ -92,16 +92,16 @@ class Enemy{
         return coordinate.getY();
     }
     method int getSize(){
-        return hp;
+        return health;
     }
     method int getSpeed(){
         return speed;
     }
-    method int getHp(){
-        return hp;
+    method int getHealth(){
+        return health;
     }
-    method int getMax_hp(){
-        return max_hp;
+    method int getMax_health(){
+        return max_health;
     }
     method int getMax_y(){
         return max_y;

@@ -5,9 +5,13 @@ class Main{
         var int playerSize;
         var boolean exit;
         var Player player;
-
+        var Infoboard infoboard;
+        /* The size of the infoboard */
+        let width = 206;
+        let height = 248;
+        let infoboard = Infoboard.new(304, 2, height, width);
         /* The size of the game board */
-        let width = 200;
+        let width = 300;
         let height = 248;
         let background = Background.new(2, 2, height, width);
         
@@ -34,6 +38,7 @@ class Main{
 
         do Screen.clearScreen();
         do background.draw();
+        do infoboard.draw();
         /* Main Program */
         while(~exit) {
             // player.draw(false);
