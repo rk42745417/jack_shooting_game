@@ -37,13 +37,13 @@ class Infoboard{
         do Output.printString("Press space to shoot");
         return;
     }
-    method void update_score(int new_score){
-        let score=new_score;
+    method void updateScore(int newScore){
+        let score=newScore;
         do Output.moveCursor(2,40);
         do Output.printInt(score);
         return;
     }
-    method void print_message(int type){//type=0 is clear
+    method void printMessage(int type){//type=0 is clear
         var String message;
         if(type=0){
             do Output.moveCursor(17,40);
@@ -62,14 +62,14 @@ class Infoboard{
         }
         return;
     }
-    method void update_level(int new_level){
-        let level=new_level;
+    method void updateLevel(int newLevel){
+        let level=newLevel;
         do Output.moveCursor(5,40);
         do Output.printInt(level);
         return;
     }
-    method void update_health(int new_health){
-        let health=new_health;
+    method void updateHealth(int newHealth){
+        let health=newHealth;
         do Output.moveCursor(8,40);
         do Output.printInt(health);
         return;
