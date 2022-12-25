@@ -37,7 +37,7 @@ class Rand {
         // Probability of generating true: 1 - cutOff / 100 
         var int randBinaryInt;
         var boolean randReturnBoolean;
-        let randBinaryInt = Random.randRange(100);
+        let randBinaryInt = Rand.randRange(100);
         if (randBinaryInt < cutOff) {
             let randReturnBoolean = true;
         }
