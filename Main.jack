@@ -60,7 +60,7 @@ class Main {
         let testbullet = Bullet.new(120,150,9,0);
         let time=0;
         let enemySize=25;
-        let enemySpeed=8;
+        let enemySpeed=5;
         let generatePeriod=25;
 
         /* The size of the infoboard */
@@ -124,8 +124,8 @@ class Main {
             let newBulletCounter = 0;
             let newBullet = null;
             let nextBullets = null;
-            do Output.moveCursor(13,40);
-            do Output.printInt(time);
+            //do Output.moveCursor(13,40);
+            //do Output.printInt(time);
             let key = Keyboard.keyPressed();
 
             /* Count the number of exist bullets after one move and erase bullets */
