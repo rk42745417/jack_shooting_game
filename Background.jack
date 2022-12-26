@@ -113,8 +113,8 @@ class Background{
         var boolean complete;
         var Array arr;
         do Rand.setSeed(Rand.rand());
-        let cnt=Rand.randRange(3)+1;
-        let arr=Array.new(4);
+        let cnt=Rand.randRange(2)+1;
+        let arr=Array.new(3);
         let i=0;
         while(i<cnt){
             let j=0;
@@ -164,9 +164,10 @@ class Background{
                     do enemy.dispose();
                     let enemies[enemyIndex]=null;
                 }
+                do bullet.dispose();
             }
             else{
-                while(~(status=1|status=3) & bulletIndex < bulletsSize){
+                while((~(status=1|status=3)) & (bulletIndex < bulletsSize)){
                     //if(~bullet)
                     let bullet = bullets[bulletIndex];
                     if(~(bullet=null)){
@@ -187,6 +188,7 @@ class Background{
             }
             let enemyIndex=enemyIndex+1;
         }
+        do draw();
         do transfer();
         return;
     }

@@ -25,10 +25,10 @@ class Infoboard{
         do Output.printString("Score:");
         do Output.moveCursor(2,40);
         do Output.printInt(score);
-        do Output.moveCursor(4,40);
-        do Output.printString("Level:");
-        do Output.moveCursor(5,40);
-        do Output.printInt(level);
+        //do Output.moveCursor(4,40);
+        //do Output.printString("Level:");
+        //do Output.moveCursor(5,40);
+        //do Output.printInt(level);
         do Output.moveCursor(7,40);
         do Output.printString("HP:");
         do Output.moveCursor(8,40);
@@ -61,6 +61,12 @@ class Infoboard{
             let message="You are damaged";
             do Output.printString(message);
         }
+        return;
+    }
+    method void updateScore(int newScore){
+        let score=newScore;
+        do Output.moveCursor(2,40);
+        do Output.printInt(score);
         return;
     }
     method void updateLevel(int newLevel){

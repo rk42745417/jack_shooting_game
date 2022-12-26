@@ -178,16 +178,25 @@ class Main {
             }
             do background.judge(bullets,bulletsSize);
             do background.moveEnemy();
-            let exit = false;            
+            if(~(infoboard.getHealth()>0)){
+                let exit = true;
+            }
+            else{
+                let exit = false;
+            }          
             let time=time+1;
+            do infoboard.updateHealth(infoboard.getHealth()-background.getDhealth());
+            do infoboard.updateScore(infoboard.getScore()+background.getDscore()*infoboard.getLevel());
             do Sys.wait(100);
         }
-
         /* Game over, output the END screen */
         do Screen.clearScreen();
         do Output.moveCursor(10, 30);
         do Output.printString("END");
-
+        do Output.moveCursor(12, 28);
+        do Output.printString("Score:");
+        do Output.moveCursor(13, 30);
+        do Output.printInt(infoboard.getScore());
         return;
     }
 }
