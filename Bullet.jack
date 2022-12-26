@@ -1,41 +1,33 @@
-class Bullet{
-    field Coordinate coordinate;
-    field int radius, speed;//x,y is center
+class Bullet {
+    field Coordinate center;
+    field int radius, speed;
     constructor Bullet new(int Ax,int Ay,int Aradius,int Aspeed){
-        let coordinate = Coordinate.new(Ax, Ay);
+        let center = Coordinate.new(Ax, Ay);
         let radius = Aradius;
         let speed = Aspeed;
-        do draw(true);
         return this;
     }
     method void dispose() {
-        do coordinate.dispose();
+        do center.dispose();
         do Memory.deAlloc(this);
         return;
     }
+    method Coordinate newCoordinate(int upperBound) {
+        if(center.getY() - speed > upperBound) {
+            return Coordinate.new(center.getX(), center.getY() - speed);
+        }
+        return null;
+    }
     method void draw(boolean isBlack){
         do Screen.setColor(isBlack);
-        do Screen.drawCircle(cooridnate.getX(), coordinate.getY(), radius);
-        return;
-    }
-    method void move(){
-        var int yn;
-        let yn=coordinate.getY()-speed;
-        do draw(false);
-        if(~((yn-radius)>2)){
-            do coordinate.setY(yn);
-            do draw(true);
-        }
-        else{
-            do dispose();
-        }
+        do Screen.drawCircle(center.getX(), center.getY(), radius);
         return;
     }
     method int getX(){
-        return coordinate.getX();
+        return center.getX();
     }
     method int getY(){
-        return coordinate.getY();
+        return center.getY();
     }
     method int getRadius(){
         return radius;

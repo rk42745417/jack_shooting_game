@@ -1,11 +1,62 @@
-class Main{
+class Main {
+    /* Transfer the old bullet array to the new one and dispose the old one */
+    function Array transfer(int bulletsSize, int newBulletCounter, Array bullets, Bullet newBullet, int radius, int speed) {
+        var Array tmp;
+        var int index, newIndex;
+        var Bullet bulletTmp;
+        var Coordinate coordinateTmp;
+
+        let tmp = bullets;
+        let newIndex = 0;
+
+        if(newBulletCounter > 0) {
+            let bullets = Array.new(newBulletCounter);
+
+            let index = 0;
+            while(index < bulletsSize) {
+                let bulletTmp = tmp[index];
+                let index = index + 1;
+                let coordinateTmp = bulletTmp.newCoordinate(2);
+                if(~(coordinateTmp = null)) {
+                    let bullets[newIndex] = Bullet.new(coordinateTmp.getX(), coordinateTmp.getY(), radius, speed);
+                    let newIndex = newIndex + 1;
+                    do coordinateTmp.dispose();
+                }
+            }
+            if(~(newBullet = null)) {
+                let bullets[newIndex] = newBullet;
+                let newIndex = newIndex + 1;
+            }
+        }
+        else {
+            let bullets = null;
+        }
+
+        let index = 0;
+        while(index < bulletsSize) {
+            let bulletTmp = tmp[index];
+            do bulletTmp.dispose();
+            let index = index + 1;
+        }
+        if(~(tmp = null)) {
+            do tmp.dispose();
+        }
+        return bullets;
+    }
     function void main(){
         var Background background;
         var int key, width, height;
-        var int playerSize;
+        var int playerSize, shootPeriod, shootCounter;
         var boolean exit;
         var Player player;
         var Infoboard infoboard;
+        var Array bullets;
+        var int bulletsSize, index, newBulletCounter; // used to access bullets and count bullets at the next tick
+        var Bullet bulletTmp; // Conversing
+        var Coordinate coordinateTmp;
+        var Bullet newBullet; // Create new bullet
+        var int bulletRadius, bulletSpeed;
+
         /* The size of the infoboard */
         let width = 206;
         let height = 248;
@@ -17,6 +68,10 @@ class Main{
         
         let playerSize = 18;
         let player = Player.new(2 + (width / 2), 3, playerSize, 15, 2 + ((height + background.getLineHeight()) / 2) - 1);
+        let shootPeriod = 5; // ticks per shoot
+
+        let bulletRadius = 10;
+        let bulletSpeed = 15;
 
         let key = Keyboard.keyPressed();
         let exit = false;
@@ -39,22 +94,59 @@ class Main{
         do Screen.clearScreen();
         do background.draw();
         do infoboard.draw();
+
         /* Main Program */
+        let shootCounter = 0;
+        let bulletsSize = 0;
         while(~exit) {
-            // player.draw(false);
+            let newBulletCounter = 0;
+            let newBullet = null;
             let key = Keyboard.keyPressed();
+
+            let index = 0;
+            while(index < bulletsSize) {
+                let bulletTmp = bullets[index];
+                let coordinateTmp = bulletTmp.newCoordinate(2);
+                if(~(coordinateTmp = null)) {
+                    let newBulletCounter = newBulletCounter + 1;
+                    do coordinateTmp.dispose();
+                }
+                do bulletTmp.draw(false);
+                let index = index + 1;
+            }
+
             if(key = 132) { // right arrow
                 do player.draw(false);
                 do player.moveRight(2 + width);
             }
-            if(key = 130) {
+            if(key = 130) { // left arrow
                 do player.draw(false);
                 do player.moveLeft(2);
             }
+            if(key = 32) { // space
+                if(shootCounter = shootPeriod) { // FIRE!!!
+                    let shootCounter = 0;
+                    let newBulletCounter = newBulletCounter + 1;
+                    let coordinateTmp = player.getCoordinate();
+                    let newBullet = Bullet.new(coordinateTmp.getX(), background.getLineHeight() - bulletRadius, bulletRadius, bulletSpeed);
+                }
+            }
+
+            let bullets = Main.transfer(bulletsSize, newBulletCounter, bullets, newBullet, bulletRadius, bulletSpeed);
+            let bulletsSize = newBulletCounter;
+
+            let index = 0;
+            while(index < bulletsSize) {
+                let bulletTmp = bullets[index];
+                do bulletTmp.draw(true);
+                let index = index + 1;
+            }
+
             do player.draw(true);
-            let exit = false;            
-            
-            do Sys.wait(100);
+            if(shootCounter < shootPeriod) {
+                let shootCounter = shootCounter + 1;
+            }
+            do Sys.wait(100); // 10 ticks per second
         }
 
         /* Game over, output the END screen */

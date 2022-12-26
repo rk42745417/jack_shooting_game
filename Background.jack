@@ -16,8 +16,9 @@ class Background{
         let line = y + height - 1 - (height / 6); // The line is at the 1/6 height from bottom.
         return this;
     }
+    /* In length */
     method int getLineHeight() {
-        return line;
+        return line - y;
     }
     method void draw() {
         var int newX, newY;
