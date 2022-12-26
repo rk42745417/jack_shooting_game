@@ -13,6 +13,7 @@ class Bullet {
         do Memory.deAlloc(this);
         return;
     }
+    /* Return a new Coorinate Object of the position the bullet moved one tick at. */
     method Coordinate newCoordinate(int upperBound) {
         if(center.getY() - speed > upperBound) {
             return Coordinate.new(center.getX(), center.getY() - speed);

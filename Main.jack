@@ -1,6 +1,6 @@
 class Main {
-    /* Transfer the old bullet array to the new one and dispose the old one */
-    function Array transfer(int bulletsSize, int newBulletCounter, Array bullets, Bullet newBullet, int radius, int speed) {
+    /* Transfer the old bullet array to the new one and dispose the old one, return the new array */
+    function Array transfer(int bulletsSize, int newBulletCounter, Array bullets, Bullet newBullet, int radius, int speed, Array nextBullets) {
         var Array tmp;
         var int index, newIndex;
         var Bullet bulletTmp;
@@ -15,13 +15,14 @@ class Main {
             let index = 0;
             while(index < bulletsSize) {
                 let bulletTmp = tmp[index];
-                let index = index + 1;
-                let coordinateTmp = bulletTmp.newCoordinate(2);
-                if(~(coordinateTmp = null)) {
+                if(nextBullets[index] = 1) {
+                    let coordinateTmp = bulletTmp.newCoordinate(2);
                     let bullets[newIndex] = Bullet.new(coordinateTmp.getX(), coordinateTmp.getY(), radius, speed);
                     let newIndex = newIndex + 1;
                     do coordinateTmp.dispose();
                 }
+                do bulletTmp.dispose();
+                let index = index + 1;
             }
             if(~(newBullet = null)) {
                 let bullets[newIndex] = newBullet;
@@ -32,41 +33,36 @@ class Main {
             let bullets = null;
         }
 
-        let index = 0;
-        while(index < bulletsSize) {
-            let bulletTmp = tmp[index];
-            do bulletTmp.dispose();
-            let index = index + 1;
-        }
         if(~(tmp = null)) {
             do tmp.dispose();
         }
+
         return bullets;
     }
     function void main(){
         var Background background;
         var int key, width, height;
-        var int playerSize, shootPeriod, shootCounter;
-        var boolean exit;
-        var Player player;
+        var int playerSize, playerSpeed, shootPeriod, shootCounter;
         var Infoboard infoboard;
-        var Array bullets;
+        var Array bullets, nextBullets;
         var int bulletsSize, index, newBulletCounter; // used to access bullets and count bullets at the next tick
         var Bullet bulletTmp; // Conversing
         var Coordinate coordinateTmp;
         var Bullet newBullet; // Create new bullet
         var int bulletRadius, bulletSpeed;
-        var int enemySize,generate_period,enemySpeed;
+        var int enemySize,generatePeriod,enemySpeed;
         var boolean exit;
         var Player player;
         var Infoboard infoboard;
         var Bullet testbullet;//for testing
         var int time; //for generate enemy
+
         let testbullet = Bullet.new(120,150,9,0);
         let time=0;
         let enemySize=25;
-        let enemySpeed=2;
-        let generate_period=25;
+        let enemySpeed=8;
+        let generatePeriod=25;
+
         /* The size of the infoboard */
         let width = 206;
         let height = 248;
@@ -77,12 +73,13 @@ class Main {
         let background = Background.new(2, 2, height, width);
         
         let playerSize = 18;
-        let player = Player.new(2 + (width / 2),  playerSize, 15, 2 + ((height + background.getLineHeight()) / 2) - 1);
+        let playerSpeed = 19; // Pixels per tick
+        let player = Player.new(2 + (width / 2), playerSize, playerSpeed, 2 + ((height + background.getLineHeight()) / 2) - 1);
         let shootPeriod = 5; // ticks per shoot
 
         let bulletRadius = 10;
-        let bulletSpeed = 15;
-        
+        let bulletSpeed = 15; // Pixels per tick
+
         let key = Keyboard.keyPressed();
         let exit = false;
         
@@ -112,33 +109,45 @@ class Main {
             }
             let time=time+5;
         }
+
         do Rand.setSeed(time);
-        let time=0;
+        let time=generatePeriod;
         do Screen.clearScreen();
         do background.draw();
         do infoboard.draw();
-
         do background.initEnemy();
+
         /* Main Program */
         let shootCounter = 0;
         let bulletsSize = 0;
         while(~exit) {
             let newBulletCounter = 0;
             let newBullet = null;
+            let nextBullets = null;
             do Output.moveCursor(13,40);
             do Output.printInt(time);
             let key = Keyboard.keyPressed();
 
-            let index = 0;
-            while(index < bulletsSize) {
-                let bulletTmp = bullets[index];
-                let coordinateTmp = bulletTmp.newCoordinate(2);
-                if(~(coordinateTmp = null)) {
-                    let newBulletCounter = newBulletCounter + 1;
-                    do coordinateTmp.dispose();
+            /* Count the number of exist bullets after one move and erase bullets */
+            if(bulletsSize > 0) {
+                let index = 0;
+                let nextBullets = Array.new(bulletsSize);
+                while(index < bulletsSize) {
+                    let bulletTmp = bullets[index];
+                    do bulletTmp.draw(false);
+                    let coordinateTmp = bulletTmp.newCoordinate(2);
+                    if((~(coordinateTmp = null)) & (~(background.willCrash(bulletTmp)))) {
+                        let newBulletCounter = newBulletCounter + 1;
+                        let nextBullets[index] = 1;
+                    }
+                    else {
+                        let nextBullets[index] = 0;
+                    }
+                    if(~(coordinateTmp = null)) {
+                        do coordinateTmp.dispose();
+                    }
+                    let index = index + 1;
                 }
-                do bulletTmp.draw(false);
-                let index = index + 1;
             }
 
             if(key = 132) { // right arrow
@@ -158,26 +167,32 @@ class Main {
                 }
             }
 
-            let bullets = Main.transfer(bulletsSize, newBulletCounter, bullets, newBullet, bulletRadius, bulletSpeed);
-            let bulletsSize = newBulletCounter;
-
-            let index = 0;
-            while(index < bulletsSize) {
-                let bulletTmp = bullets[index];
-                do bulletTmp.draw(true);
-
-                let index = index + 1;
-            }
-
             do player.draw(true);
             if(shootCounter < shootPeriod) {
                 let shootCounter = shootCounter + 1;
             }
-            if(((time/generate_period)*generate_period)=time){
+            if(time = generatePeriod) {
                 do background.generateEnemy(enemySize,enemySpeed,1);
+                let time = 0;
             }
             do background.judge(bullets,bulletsSize);
             do background.moveEnemy();
+
+            let bullets = Main.transfer(bulletsSize, newBulletCounter, bullets, newBullet, bulletRadius, bulletSpeed, nextBullets);
+            let bulletsSize = newBulletCounter;
+
+            let index = 0; // Draw the bullets
+            while(index < bulletsSize) {
+                let bulletTmp = bullets[index];
+                do bulletTmp.draw(true);
+                let index = index + 1;
+            }
+            if(~(nextBullets = null)) {
+                do nextBullets.dispose();
+            }
+
+            do infoboard.updateHealth(infoboard.getHealth()-background.getDhealth());
+            do infoboard.updateScore(infoboard.getScore()+background.getDscore()*infoboard.getLevel());
             if(~(infoboard.getHealth()>0)){
                 let exit = true;
             }
@@ -185,17 +200,15 @@ class Main {
                 let exit = false;
             }          
             let time=time+1;
-            do infoboard.updateHealth(infoboard.getHealth()-background.getDhealth());
-            do infoboard.updateScore(infoboard.getScore()+background.getDscore()*infoboard.getLevel());
             do Sys.wait(100);
         }
         /* Game over, output the END screen */
         do Screen.clearScreen();
         do Output.moveCursor(10, 30);
         do Output.printString("END");
-        do Output.moveCursor(12, 28);
+        do Output.moveCursor(12, 29);
         do Output.printString("Score:");
-        do Output.moveCursor(13, 30);
+        do Output.moveCursor(13, 31);
         do Output.printInt(infoboard.getScore());
         return;
     }

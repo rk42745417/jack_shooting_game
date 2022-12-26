@@ -168,7 +168,6 @@ class Background{
             }
             else{
                 while((~(status=1|status=3)) & (bulletIndex < bulletsSize)){
-                    //if(~bullet)
                     let bullet = bullets[bulletIndex];
                     if(~(bullet=null)){
                         let status=enemy.judge(bullet);
@@ -191,6 +190,19 @@ class Background{
         do draw();
         do transfer();
         return;
+    }
+    method boolean willCrash(Bullet bullet) {
+        var int index;
+        var Enemy enemy;
+        let index = 0;
+        while(index < enemiesSize) {
+            let enemy = enemies[index];
+            if(enemy.isCrash(bullet)) {
+                return true;
+            }
+            let index = index + 1;
+        }
+        return false;
     }
     method void moveEnemy(){
         var int enemyIndex;
