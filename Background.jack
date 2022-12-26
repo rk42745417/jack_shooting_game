@@ -8,6 +8,9 @@ class Background{
     field int x, y;
     field int width, height;
     field int line; // The y coordinate of the detection line.
+    field EnemyList head,tail;
+    field Rand rand;
+    field int dhealth,dscore;
     constructor Background new(int Ax, int Ay, int Aheight, int Awidth) {
         let x = Ax;
         let y = Ay;
@@ -34,9 +37,58 @@ class Background{
         do Screen.drawLine(x, line, newX, line); // The detection line
         return;
     }
-
+    method void initEnemy(){
+        let head=EnemyList.new(null,null,null);
+        let tail=EnemyList.new(null,head,null);
+        do head.setNext(tail);
+        return;
+    }
+    method void generateEnemy(int size,int speed,int level){
+        var Enemy newEnemy;
+        var EnemyList newNode,prev,next;
+        do Random.setSeed(Random.rand());
+        let newEnemy=Enemy.new(50,3,size,speed,level,level,line);
+        do newEnemy.draw();
+        let newNode=EnemyList.new(newEnemy,tail.getPrev(),tail);
+        let prev=newNode.getPrev();
+        let next=newNode.getNext();
+        do prev.setNext(newNode);
+        do next.setPrev(newNode);
+        return;
+    }
+    method void moveEnemy(Bullet bullet){
+        var int status;
+        //return 0 for nothing; 1 for drop to dection line; 2 for crash and alive; 3 for crash and died
+        var EnemyList node,next;
+        var Enemy now;
+        let dhealth=0;
+        let dscore=0;
+        let node=head.getNext();
+        let now=node.getData();
+        while(~(now=null)){
+            let next=node.getNext();
+            let status=now.move(bullet);
+            if(status=1){
+                let dhealth=dhealth+1;
+                do node.dispose();
+            }
+            if(status=3){
+                let dscore=dscore+1;
+                do node.dispose();
+            }
+            let node=next;
+            let now=node.getData();
+        }
+        return;
+    }
     method void dispose() {
         do Memory.deAlloc(this);
         return;
+    }
+    method int getDhealth(){
+        return dhealth;
+    }
+    method int getDscore(){
+        return dscore;
     }
 }

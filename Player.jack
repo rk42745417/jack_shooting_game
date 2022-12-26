@@ -1,12 +1,10 @@
 class Player{
     field int radius;
-    field int health;
     field int speed; // pixels per move
     field Coordinate coordinate;
     
-    constructor Player new(int Aposition, int Ahealth, int Aradius, int Aspeed, int Aheight) {
+    constructor Player new(int Aposition, int Aradius, int Aspeed, int Aheight) {
         let coordinate = Coordinate.new(Aposition, Aheight);
-        let health = Ahealth;
         let radius = Aradius;
         let speed = Aspeed;
         return this;
@@ -29,11 +27,7 @@ class Player{
         do coordinate.setX(coordinate.getX() + speed);
         return;
     }
-    /* value can be negative */
-    method void addHealth(int value) {
-        let health = health + value;
-        return;
-    }
+
     method void draw(boolean isBlack) {
         do Screen.setColor(isBlack);
         do Screen.drawCircle(coordinate.getX(), coordinate.getY(), radius);

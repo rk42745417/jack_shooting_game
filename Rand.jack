@@ -31,20 +31,5 @@ class Rand {
     }
 
 
-    function boolean randBoolean(int cutOff) {
-        // cutOff: 0 - 100
-        // Probability of generating true: cutOff / 100 
-        // Probability of generating true: 1 - cutOff / 100 
-        var int randBinaryInt;
-        var boolean randReturnBoolean;
-        let randBinaryInt = Rand.randRange(100);
-        if (randBinaryInt < cutOff) {
-            let randReturnBoolean = true;
-        }
-        else {
-            let randReturnBoolean = false;
-        }
-        return randReturnBoolean;
-    }
 
 }

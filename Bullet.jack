@@ -5,6 +5,7 @@ class Bullet {
         let center = Coordinate.new(Ax, Ay);
         let radius = Aradius;
         let speed = Aspeed;
+        //do draw(true);
         return this;
     }
     method void dispose() {

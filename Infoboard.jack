@@ -35,9 +35,10 @@ class Infoboard{
         do Output.printInt(health);
         do Output.moveCursor(15,40);
         do Output.printString("Use arrow keys to move");
+        do Rand.setSeed(137);
         return;
     }
-    method void updateScore(int newScore){
+    method void addScore(int newScore){
         let score=newScore;
         do Output.moveCursor(2,40);
         do Output.printInt(score);
@@ -73,6 +74,15 @@ class Infoboard{
         do Output.moveCursor(8,40);
         do Output.printInt(health);
         return;
+    }
+    method int getScore(){
+        return score;
+    }
+    method int getHealth(){
+        return health;
+    }
+    method int getLevel(){
+        return level;
     }
     method void dispose() {
         do Memory.deAlloc(this);

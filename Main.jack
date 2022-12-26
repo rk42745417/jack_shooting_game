@@ -56,7 +56,17 @@ class Main {
         var Coordinate coordinateTmp;
         var Bullet newBullet; // Create new bullet
         var int bulletRadius, bulletSpeed;
-
+        var int enemySize,generate_period,enemySpeed;
+        var boolean exit;
+        var Player player;
+        var Infoboard infoboard;
+        var Bullet testbullet;//for testing
+        var int time; //for generate enemy
+        let testbullet = Bullet.new(120,150,9,0);
+        let time=0;
+        let enemySize=25;
+        let enemySpeed=2;
+        let generate_period=25;
         /* The size of the infoboard */
         let width = 206;
         let height = 248;
@@ -67,12 +77,12 @@ class Main {
         let background = Background.new(2, 2, height, width);
         
         let playerSize = 18;
-        let player = Player.new(2 + (width / 2), 3, playerSize, 15, 2 + ((height + background.getLineHeight()) / 2) - 1);
+        let player = Player.new(2 + (width / 2),  playerSize, 15, 2 + ((height + background.getLineHeight()) / 2) - 1);
         let shootPeriod = 5; // ticks per shoot
 
         let bulletRadius = 10;
         let bulletSpeed = 15;
-
+        
         let key = Keyboard.keyPressed();
         let exit = false;
         
@@ -86,21 +96,33 @@ class Main {
         }
         while(~(key = 32)) { // Wait until space is pressed
             let key = Keyboard.keyPressed();
+            if(time>30000){
+                let time=0;
+            }
+            let time=time+1;
         }
         while(key = 32) { // Wait until spce is released
             let key = Keyboard.keyPressed();
+            if(time>30000){
+                let time=0;
+            }
+            let time=time+5;
         }
-
+        Rand.setSeed(time);
+        let time=0;
         do Screen.clearScreen();
         do background.draw();
         do infoboard.draw();
 
+        do background.initEnemy();
         /* Main Program */
         let shootCounter = 0;
         let bulletsSize = 0;
         while(~exit) {
             let newBulletCounter = 0;
             let newBullet = null;
+            do Output.moveCursor(13,40);
+            do Output.printInt(time);
             let key = Keyboard.keyPressed();
 
             let index = 0;
@@ -146,7 +168,13 @@ class Main {
             if(shootCounter < shootPeriod) {
                 let shootCounter = shootCounter + 1;
             }
-            do Sys.wait(100); // 10 ticks per second
+            if(((time/generate_period)*generate_period)=time){
+                do background.generateEnemy(enemySize,enemySpeed,1);
+            }
+            do background.moveEnemy(testbullet);
+            let exit = false;            
+            let time=time+1;
+            do Sys.wait(100);
         }
 
         /* Game over, output the END screen */

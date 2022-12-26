@@ -8,10 +8,10 @@ class Enemy{
         let health=_health;
         let maxHealth=_maxHealth;
         let maxY=_maxY;
-        do draw();
         return this;
     }
     method void dispose() {
+        do coordinate.dispose();
         do Memory.deAlloc(this);
         return;
     }
@@ -21,13 +21,14 @@ class Enemy{
         let up=coordinate.getY();
         let right=left+size-1;
         let down=up+size-1;
+        let part=left+size*health/maxHealth-1;
         do Screen.setColor(true);
+        do Screen.drawRectangle(left,up,part,down);
         do Screen.drawLine(left,up,right,up);
         do Screen.drawLine(left,up,left,down);
         do Screen.drawLine(left,down,right,down);
         do Screen.drawLine(right,up,right,down);
-        let part=left+size*(health/maxHealth)-1;
-        do Screen.drawRectangle(left,up,part,down);
+        
         return;
     }
     method void erase(){
@@ -37,55 +38,65 @@ class Enemy{
         let right=left+size-1;
         let down=up+size-1;
         do Screen.setColor(false);
-        do Screen.drawRectangle(left,up,left+right,down);
+        do Screen.drawRectangle(left,up,right,down);
         return;
+    }
+    //return 0 for nothing; 1 for drop to dection line; 2 for crash and alive; 3 for crash and died 
+    method int judge(Bullet bullet){
+        var int yn;
+        var boolean crashed;
+        let yn=coordinate.getY();
+        if((yn+size)>maxY){
+            return 1;
+        }
+        else{
+            let crashed = isCrash(bullet);
+            if(crashed){
+                return crash();
+            }
+            else{
+                return 0;
+            }
+        }
     }
     method void move(){
         var int yn;
-        let yn=coordinate.getY()+speed;
         do erase();
-        if(~((yn+size)<maxY)){
-            do coordinate.setY(yn);
-            do draw();
-        }
-        else{//player health -1;
-            do dispose();
-        }
+        let yn=coordinate.getY()+speed;
+        do coordinate.setY(yn);
+        do draw();
         return;
     }
-    method void crash(){
+    method int crash(){
         var int newHealth;
         let newHealth=health-1;
-        do erase();
-        if(~(newHealth>0)){
+        if(newHealth>0){
             let health=newHealth;
-            do draw();
+            return 2;
         }
         else{
-            do dispose();
+            return 3;
         }
-        return;
     }
     method boolean isCrash(Bullet bullet){
-        var int r2,down,left,right,up,bul_x,bul_y,bul_left,bul_right,dis_c_down,dis_c_leftdown,dis_c_rightdown;
-        //dis is squared
-        let r2=bullet.getRadius()*bullet.getRadius();
+        var int r,down,left,right,up,bul_x,bul_y,bul_left,bul_right,dis_c_down;
         let left=coordinate.getX();
         let up=coordinate.getY();
         let right=left+size-1;
         let down=up+size-1;
+        let r=bullet.getRadius();
         let bul_x=bullet.getX();
         let bul_y=bullet.getY();
-        let dis_c_down=(bul_y-down) * (bul_y-down);
-        let dis_c_leftdown=(bul_x-left) * (bul_x-left) + (bul_y-down) * (bul_y-down);
-        let dis_c_rightdown=(bul_x-right) * (bul_x-left) + (bul_y-down) * (bul_x-down);
-        if(( ~( (dis_c_leftdown > r2) & (dis_c_rightdown > r2) ) ) |
-           ( ( ~(dis_c_down > r2) ) & ( ~( (left>bul_right) | (right<bul_left) ) ) )){
+        let bul_left=bul_x-r;
+        let bul_right=bul_x+r;
+        let dis_c_down= bul_y-r-down;
+        if( (~(dis_c_down>0)) & (~( (left>bul_right) | (right<bul_left) )) ){
             return true;
         }
         else{
             return false;
         }
+        
     }
     method int getX(){
         return coordinate.getX();
