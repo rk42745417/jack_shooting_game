@@ -1,0 +1,22 @@
+class EnemyList{
+    field Enemy data;          // a list consists of a data field,
+    field EnemyList prev,next;
+    constructor EnemyList new(Enemy _data, EnemyList _prev,EnemyList  _next) {
+        let data = _data;
+        let prev = _prev;
+        let next = _next;
+        return this;
+    }
+    method Enemy getData() { return data; }
+    method EnemyList getNext() { return next; }
+    method EnemyList getPrev() { return prev; }
+    method void setData(Enemy _data) { let data=_data; return;}
+    method void setNext(EnemyList _next) { let next=_next; return;}
+    method void setPrev(EnemyList _prev) { let prev=_prev; return;}
+    method void dispose(){
+        do data.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+}

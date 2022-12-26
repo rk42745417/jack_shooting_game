@@ -93,22 +93,26 @@ class Main {
 
         while(~(key = 0)) { // Wait until no key is pressed
             let key = Keyboard.keyPressed();
+            if(time>30001){
+                let time=time-30001;
+            }
+            let time=time+7;
         }
         while(~(key = 32)) { // Wait until space is pressed
             let key = Keyboard.keyPressed();
-            if(time>30000){
-                let time=0;
+            if(time>30001){
+                let time=time-30001;
             }
             let time=time+1;
         }
         while(key = 32) { // Wait until spce is released
             let key = Keyboard.keyPressed();
-            if(time>30000){
-                let time=0;
+            if(time>30001){
+                let time=time-30001;
             }
             let time=time+5;
         }
-        Rand.setSeed(time);
+        do Rand.setSeed(time);
         let time=0;
         do Screen.clearScreen();
         do background.draw();
@@ -161,6 +165,7 @@ class Main {
             while(index < bulletsSize) {
                 let bulletTmp = bullets[index];
                 do bulletTmp.draw(true);
+
                 let index = index + 1;
             }
 
@@ -171,7 +176,8 @@ class Main {
             if(((time/generate_period)*generate_period)=time){
                 do background.generateEnemy(enemySize,enemySpeed,1);
             }
-            do background.moveEnemy(testbullet);
+            do background.judge(bullets,bulletsSize);
+            do background.moveEnemy();
             let exit = false;            
             let time=time+1;
             do Sys.wait(100);

@@ -21,14 +21,15 @@ class Enemy{
         let up=coordinate.getY();
         let right=left+size-1;
         let down=up+size-1;
-        let part=left+size*health/maxHealth-1;
+        //let part=left+size*health/maxHealth-1;
         do Screen.setColor(true);
-        do Screen.drawRectangle(left,up,part,down);
+        do Screen.drawRectangle(left,up,right,down);
+        /*
         do Screen.drawLine(left,up,right,up);
         do Screen.drawLine(left,up,left,down);
         do Screen.drawLine(left,down,right,down);
         do Screen.drawLine(right,up,right,down);
-        
+        */
         return;
     }
     method void erase(){
@@ -45,6 +46,7 @@ class Enemy{
     method int judge(Bullet bullet){
         var int yn;
         var boolean crashed;
+        do erase();
         let yn=coordinate.getY();
         if((yn+size)>maxY){
             return 1;
@@ -61,7 +63,6 @@ class Enemy{
     }
     method void move(){
         var int yn;
-        do erase();
         let yn=coordinate.getY()+speed;
         do coordinate.setY(yn);
         do draw();
@@ -105,7 +106,7 @@ class Enemy{
         return coordinate.getY();
     }
     method int getSize(){
-        return health;
+        return size;
     }
     method int getSpeed(){
         return speed;

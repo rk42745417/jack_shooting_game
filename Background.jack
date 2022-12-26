@@ -11,6 +11,8 @@ class Background{
     field EnemyList head,tail;
     field Rand rand;
     field int dhealth,dscore;
+    field Array enemies;
+    field int enemiesSize;
     constructor Background new(int Ax, int Ay, int Aheight, int Awidth) {
         let x = Ax;
         let y = Ay;
@@ -37,47 +39,165 @@ class Background{
         do Screen.drawLine(x, line, newX, line); // The detection line
         return;
     }
+    method void transfer() {
+        var Array tmp;
+        var int index, newIndex;
+        var Enemy enemyTmp;
+        var int newEnemyCounter;
+        let index = 0;
+        while(index < enemiesSize) {
+            let enemyTmp = enemies[index];
+            if(~(enemyTmp=null)) {
+                let newEnemyCounter = newEnemyCounter + 1;
+            }
+            let index = index + 1;
+        }
+        let index = 0;
+        let tmp = enemies;
+        let newIndex = 0;
+        if(newEnemyCounter > 0) {
+            let enemies = Array.new(newEnemyCounter);
+            let index = 0;
+            while(index < enemiesSize) {
+                let enemyTmp = tmp[index];
+                let index = index + 1;
+                if(~(enemyTmp = null)) {
+                    let enemies[newIndex] = Enemy.new(enemyTmp.getX(),enemyTmp.getY(),enemyTmp.getSize(),enemyTmp.getSpeed(),enemyTmp.getHealth(),enemyTmp.getMaxHealth(),enemyTmp.getMaxY());
+                    let newIndex = newIndex + 1;
+                }
+            }
+        }
+        else {
+            let enemies = null;
+        }
+
+        let index = 0;
+        while(index < enemiesSize) {
+            let enemyTmp = tmp[index];
+            if(~(enemyTmp = null)) {
+                do enemyTmp.dispose();
+            }
+            let index = index + 1;
+        }
+        if(~(tmp = null)) {
+            do tmp.dispose();
+        }
+        let enemiesSize=newEnemyCounter;
+        return;
+    }
     method void initEnemy(){
-        let head=EnemyList.new(null,null,null);
-        let tail=EnemyList.new(null,head,null);
-        do head.setNext(tail);
+        let enemiesSize=0;
+        do transfer();
+        return;
+    }
+    method void addElement(Enemy newEnemy) {
+        var Array tmp;
+        var int index;
+        let tmp = enemies;
+        let enemies = Array.new(enemiesSize + 1);
+        let index = 0;
+        while(index < enemiesSize) {
+            let enemies[index] = tmp[index];
+            let index = index + 1;
+        }
+        let enemies[index] = newEnemy;
+        if(~(tmp = null)) {
+            do tmp.dispose();
+        }
+        let enemiesSize = enemiesSize + 1;
         return;
     }
     method void generateEnemy(int size,int speed,int level){
         var Enemy newEnemy;
-        var EnemyList newNode,prev,next;
-        do Random.setSeed(Random.rand());
-        let newEnemy=Enemy.new(50,3,size,speed,level,level,line);
-        do newEnemy.draw();
-        let newNode=EnemyList.new(newEnemy,tail.getPrev(),tail);
-        let prev=newNode.getPrev();
-        let next=newNode.getNext();
-        do prev.setNext(newNode);
-        do next.setPrev(newNode);
+        var int cnt,i,j,nx,now;
+        var boolean complete;
+        var Array arr;
+        do Rand.setSeed(Rand.rand());
+        let cnt=Rand.randRange(3)+1;
+        let arr=Array.new(4);
+        let i=0;
+        while(i<cnt){
+            let j=0;
+            let complete=true;
+            while(complete){
+                let j=0;
+                let nx=Rand.randRange(width-20-size)+20+x;
+                let complete=true;
+                while((j<i) & complete){
+                    let complete=true;
+                    let now=arr[j];
+                    if( ((x-now)<size-1) & ((now-x)<size-1)){
+                        let complete=false;
+                    }
+                    
+                    let j=j+1;
+                }
+                let complete=false;
+            }
+            let arr[i]=nx;
+            let newEnemy=Enemy.new(nx,3,size,speed,level,level,line);
+            do newEnemy.draw();
+            do addElement(newEnemy);
+            let i=i+1;
+        }
+        
+        //do Sys.halt();
+        do arr.dispose();
         return;
     }
-    method void moveEnemy(Bullet bullet){
-        var int status;
-        //return 0 for nothing; 1 for drop to dection line; 2 for crash and alive; 3 for crash and died
-        var EnemyList node,next;
-        var Enemy now;
+    method void judge(Array bullets,int bulletsSize){
+        var int bulletIndex,enemyIndex,status;
+        var Bullet bullet;
+        var Enemy enemy;
         let dhealth=0;
         let dscore=0;
-        let node=head.getNext();
-        let now=node.getData();
-        while(~(now=null)){
-            let next=node.getNext();
-            let status=now.move(bullet);
-            if(status=1){
-                let dhealth=dhealth+1;
-                do node.dispose();
+        let enemyIndex=0;
+        while(enemyIndex<enemiesSize){
+            let enemy=enemies[enemyIndex];
+            let status=-1;
+            let bulletIndex=0;
+            if(bulletsSize=0){
+                let bullet=Bullet.new(310,50,0,0);
+                let status=enemy.judge(bullet);
+                if(status=1){
+                    let dhealth=dhealth+1;
+                    do enemy.dispose();
+                    let enemies[enemyIndex]=null;
+                }
             }
-            if(status=3){
-                let dscore=dscore+1;
-                do node.dispose();
+            else{
+                while(~(status=1|status=3) & bulletIndex < bulletsSize){
+                    //if(~bullet)
+                    let bullet = bullets[bulletIndex];
+                    if(~(bullet=null)){
+                        let status=enemy.judge(bullet);
+                        if(status=1){
+                            let dhealth=dhealth+1;
+                            do enemy.dispose();
+                            let enemies[enemyIndex]=null;
+                        }
+                        if(status=3){
+                            let dscore=dscore+1;
+                            do enemy.dispose();
+                            let enemies[enemyIndex]=null;
+                        }
+                    }
+                    let bulletIndex = bulletIndex + 1;
+                }
             }
-            let node=next;
-            let now=node.getData();
+            let enemyIndex=enemyIndex+1;
+        }
+        do transfer();
+        return;
+    }
+    method void moveEnemy(){
+        var int enemyIndex;
+        var Enemy enemy;
+        let enemyIndex=0;
+        while(enemyIndex<enemiesSize){
+            let enemy=enemies[enemyIndex];
+            do enemy.move();
+            let enemyIndex=enemyIndex+1;
         }
         return;
     }

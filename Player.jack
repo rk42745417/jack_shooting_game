@@ -10,7 +10,6 @@ class Player{
         return this;
     }
     method Coordinate getCoordinate() { return coordinate; }
-    method int getHealth() { return health; }
     /* leftBorder is the border of the game board */
     method void moveLeft(int leftBorder) {
         if(coordinate.getX() - speed - radius < leftBorder) { // 3 is for the error
